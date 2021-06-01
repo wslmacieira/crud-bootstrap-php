@@ -2,6 +2,9 @@
 
 mysqli_report(MYSQLI_REPORT_STRICT);
 
+/**
+ *  Abre a conexão com BD
+ */
 function open_database() {
 	try {
 		$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
@@ -12,6 +15,9 @@ function open_database() {
 	}
 }
 
+/**
+ *  Fecha a conexão com BD
+ */
 function close_database($conn) {
 	try {
 		mysqli_close($conn);
@@ -70,10 +76,6 @@ function find_all( $table ) {
 }
 
 /**
- *  Insere um registro com ID
- */
-
-/**
 *  Insere um registro no BD
 */
 function save($table = null, $data = null) {
@@ -109,12 +111,12 @@ function save($table = null, $data = null) {
     } 
   
     close_database($database);
-  }
+}
 
   /**
  *	Atualizacao/Edicao de Cliente
  */
-function edit() {
+ function edit() {
 
     $now = date_create('now', new DateTimeZone('America/Sao_Paulo'));
   
@@ -142,7 +144,8 @@ function edit() {
   /**
  *  Atualiza um registro em uma tabela, por ID
  */
-function update($table = null, $id = 0, $data = null) {
+
+ function update($table = null, $id = 0, $data = null) {
 
     $database = open_database();
   
@@ -172,5 +175,32 @@ function update($table = null, $id = 0, $data = null) {
     } 
   
     close_database($database);
-  }
+}
+
+/**
+ *  Remove uma linha de uma tabela pelo ID do registro
+ */
+function remove( $table = null, $id = null ) {
+
+    $database = open_database();
+      
+    try {
+      if ($id) {
+  
+        $sql = "DELETE FROM " . $table . " WHERE id = " . $id;
+        $result = $database->query($sql);
+  
+        if ($result = $database->query($sql)) {   	
+          $_SESSION['message'] = "Registro Removido com Sucesso.";
+          $_SESSION['type'] = 'success';
+        }
+      }
+    } catch (Exception $e) { 
+  
+      $_SESSION['message'] = $e->GetMessage();
+      $_SESSION['type'] = 'danger';
+    }
+  
+    close_database($database);
+}
   
