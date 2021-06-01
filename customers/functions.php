@@ -29,3 +29,11 @@ function add() {
         header('location: index.php');
     }
 }
+
+/**
+ *  Visualização de um Cliente
+ */
+function view($id = null) {
+    global $customer;
+    $customer = find('customers', $id);
+  }
